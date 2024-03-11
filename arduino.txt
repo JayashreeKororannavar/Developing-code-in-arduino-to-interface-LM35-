@@ -1,0 +1,51 @@
+#include<NoDelay.h>
+noDelay LEDtime(250);//Creats a noDelay varible set to 250ms
+noDelay LEDtime1(500);//Creats a noDelay varible set to 500ms
+
+const int lm35_pin = A0;  /* LM35 O/P pin */
+int LEDpin = 13;         // arduino on board led pin is D13
+int ledState = LOW;     //initially i take led state is low 
+void setup() {
+  Serial.begin(9600); // initiallize serial debug 
+   pinMode(LEDpin, OUTPUT); // set the mode of on board led  D13 is  output mode
+}
+
+void loop() {
+  int temp_adc_val; // I take variable for store the values 
+  float temp_val;  // I take another variable for store the values
+  temp_adc_val = analogRead(lm35_pin);  /* Read Temperature */
+  temp_val = (temp_adc_val * 5.0); /* Convert adc value to equivalent voltage */
+  temp_val = (temp_val/10); /* LM35 gives output of 10mv/°C */
+  
+  Serial.print("Temperature = "); // monitoring the values on serial monitoring
+  Serial.print(temp_val);
+  Serial.print(" Degree Celsius\n");
+ 
+  
+ if(temp_val<30){
+  if(LEDtime.update())//Checks to see if set time has past
+  {
+    // if the LED is off turn it on and vice-versa:
+    if (ledState == LOW)
+      ledState = HIGH;
+    else
+      ledState = LOW;
+
+    // set the LED with the ledState of the variable:
+    digitalWrite(LEDpin, ledState);
+    
+  }
+} if(temp_val>30){
+  if(LEDtime1.update())//Checks to see if set time has past
+  {
+    // if the LED is off turn it on and vice-versa:
+    if (ledState == LOW)
+      ledState = HIGH;
+    else
+      ledState = LOW;
+
+    // set the LED with the ledState of the variable:
+    digitalWrite(LEDpin, ledState);
+     
+  }
+}
